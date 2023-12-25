@@ -1,7 +1,9 @@
 //This is the driver code with the inquirer and the init function
 const inquirer = require("inquirer");
 //const connection = reqire("./db/connection.js");
-const db = require("./db"); //There is an error here and I dont really know how to fix it.
+// const db = require("./utils");
+const db = require("./utils/index");
+
 require("console.table");
 
 function init(){
