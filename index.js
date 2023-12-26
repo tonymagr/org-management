@@ -14,68 +14,82 @@ function init(){
             message: "What would you like to do?",
             choices: [
                 {
-                    name: "View all employees",
-                    value:"viewEmployees"
-                },
-                {
-                    name: "View employees by department",
-                    value:"viewEmployeesDept"
-                },
-                {
-                    name: "View employees by manager",
-                    value:"viewEmployeesMngr"
-                },
-                {
-                    name: "Add employee",
-                    value:"addEmployee"
-                },
-                {
-                    name: "Remove Employee",
-                    value:"rmvEmployee"
-                },
-                {
-                    name: "Update employee role",
-                    value:"updateRole"
-                },
-                {
-                    name: "Update employee manager",
-                    value:"updateMngr"
+                    name: "View all departments",
+                    value:"viewDepartments"
                 },
                 {
                     name: "View all roles",
                     value:"viewRoles"
                 },
                 {
-                    name: "Add Role",
-                    value:"addRole"
-                },
-                {
-                    name: "Remove Role",
-                    value:"rmvRole"
-                },
-                {
-                    name: "View all departments",
-                    value:"viewDepartments"
+                    name: "View all employees",
+                    value:"viewEmployees"
                 },
                 {
                     name: "Add a department",
                     value:"addDepartments"
                 },
                 {
-                    name: "Remove a department",
-                    value:"rmvDepartments"
+                    name: "Add a role",
+                    value:"addRole"
                 },
                 {
-                    name: "View Total utilized budget by department",
+                    name: "Add employee",
+                    value:"addEmployee"
+                },
+                {
+                    name: "Update employee role",
+                    value:"updateRole"
+                },
+                // Bonus selections
+                {
+                    name: "View employees by department",
+                    value:"viewEmployeesDept"
+                },
+                {
+                    name: "View combined employee salaries of a department",
                     value:"viewBudget"
                 },
                 {
-                    name: "quit",
+                    name: "Quit",
                     value:"quit"
                 }   
+                // {
+                //     name: "View employees by manager",
+                //     value:"viewEmployeesMngr"
+                // },
+                // {
+                //     name: "Remove Employee",
+                //     value:"rmvEmployee"
+                // },
+                // {
+                //     name: "Update employee manager",
+                //     value:"updateMngr"
+                // },
+                // {
+                //     name: "Remove Role",
+                //     value:"rmvRole"
+                // },
+                // {
+                //     name: "Remove a department",
+                //     value:"rmvDepartments"
+                // }
             ]
         }
     ])
+
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+    // Remove some of these cases................
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+
     .then(res => {
         let choice = res.choice;
         console.log(choice);
@@ -128,133 +142,6 @@ function init(){
         }
     })
 }
-
-// options for menu for users to select from
-/*const menuChoices = [
-    {
-        name: "View all employees",
-        value:"viewEmployees"
-    },
-    {
-        name: "View employees by department",
-        value:"viewEmployeesDept"
-    },
-    {
-        name: "View employees by manager",
-        value:"viewEmployeesMngr"
-    },
-    {
-        name: "Add employee",
-        value:"addEmployee"
-    },
-    {
-        name: "Remove Employee",
-        value:"rmvEmployee"
-    },
-    {
-        name: "Update employee role",
-        value:"updateRole"
-    },
-    {
-        name: "Update employee manager",
-        value:"updateMngr"
-    },
-    {
-        name: "View all roles",
-        value:"viewRoles"
-    },
-    {
-        name: "Add Role",
-        value:"addRole"
-    },
-    {
-        name: "Remove Role",
-        value:"rmvRole"
-    },
-    {
-        name: "View all departments",
-        value:"viewDepartments"
-    },
-    {
-        name: "Add a department",
-        value:"addDepartments"
-    },
-    {
-        name: "Remove a department",
-        value:"rmvDepartments"
-    },
-    {
-        name: "View Total utilized budget by department",
-        value:"viewBudget"
-    },
-    {
-        name: "quit",
-        value:"quit"
-    }   
-];*/
-
-// menu inquirer prompt for user to use
-/*const menu = [
-    {
-        type: "list",
-        name: "MainMenu",
-        message: "What would you like to do?",
-        choices: menuChoices
-    }
-]*/
-
-// Main menu function used to hold a switch case statement that calls specific function based on input from inquirer
-/*function mainMenu(input){
-    console.log(input);
-    switch (input) {
-        case "viewEmployees":
-            viewEmp();
-            break;
-        case "viewEmployeesDept":
-            viewEmpDept();
-            break;
-        case "viewEmployeesMngr":
-            viewEmpMngr();
-            break;
-        case "addEmployee":
-            addEmp();
-            break;
-        case "rmvEmployee":
-            rmvEmp();
-            break;
-        case "updateRole":
-            updateRole();
-            break;
-        case "updateMngr":
-            updateMngr();
-            break;
-        case "viewRoles":
-            viewRoles();
-            break;
-        case "addRole":
-            addRole();
-            break;
-        case "rmvRole":
-            rmvRole();
-            break;
-        case "viewDepartments":
-            viewDept();
-            break;
-        case "addDepartments":
-            addDept();
-            break;
-        case "rmvDepartments":
-            rmvDept();
-            break;
-        case "viewBudget":
-            viewBudget();
-            break;
-        case "quit":
-            quit();
-            break;
-    }
-
-}*/
 
 // Function to view employee
 function viewEmp(){
@@ -330,7 +217,7 @@ function addEmp(){ // adds employee
 
                                 db.createEmp(emp) // use create employee function from emp variable
                             })
-                            .then(() => console.log("Added new player in db"))
+                            .then(() => console.log(`${firstName} ${lastName} added to database`))
                             .then(() => init())
                         })
                 })
@@ -406,7 +293,7 @@ function addRole(){
             {
                 type: "input",
                 name: "salary",
-                message: "what is the roles salary?"
+                message: "what is the role's salary?"
             },
             {
                 type: "list",
@@ -443,7 +330,7 @@ function addDept(){ // function used to add departments to the table
     .then(res => {
         var deptName = res;
         db.createDept(deptName)// create department using response value
-            .then(() => console.log(deptName.name+" Added Role to database"))
+            .then(() => console.log(deptName.name+" added to database"))
             .then(() => init())
 
     })
@@ -452,35 +339,5 @@ function quit(){ // Quits program
     console.log("Thank you, Goodbye")
     process.exit();
 }
-//BONUS FUNCTIONS ---- NOT DONE!!!!!
-function viewEmpDept(){ 
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function viewEmpMngr(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function rmvDept(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function viewBudget(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function rmvRole(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function updateMngr(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-function rmvEmp(){
-    console.log ("DOES NOT WORK YET (TRIED TO DO, DIDNT WORK)");
-    init();
-}
-
 
 init();

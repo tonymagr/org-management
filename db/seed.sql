@@ -1,34 +1,33 @@
-/*This file holds the seed data for the sql table*/
-/*Given seed by tutor to use to test*/
-use employeeTable;
-INSERT INTO department
-    (name)
-VALUES
-    ('Sales'),
-    ('Engineering'),
-    ('Finance'),
-    ('Legal');
+INSERT INTO department (name)
+VALUES ("Claims"),
+       ("Finance"),
+       ("Legal"),
+       ("Marketing"),
+       ("Underwriting");
 
-INSERT INTO role
-    (title, salary, department_id)
-VALUES
-    ('Sales Lead', 100000, 1),
-    ('Salesperson', 80000, 1),
-    ('Lead Engineer', 150000, 2),
-    ('Software Engineer', 120000, 2),
-    ('Account Manager', 160000, 3),
-    ('Accountant', 125000, 3),
-    ('Legal Team Lead', 250000, 4),
-    ('Lawyer', 190000, 4);
+INSERT INTO role (title, salary, department_id)
+VALUES ("Claims Adjuster", 60000, 1),
+       ("Broker", 67000, 4),
+       ("Agent", 69000, 4),
+       ("Appraiser", 74000, 1),
+       ("Actuary", 111000, 2),
+       ("Underwriter", 116000, 5),
+       ("Attorney", 150000, 3),
+       ("Operations Manager- Claims", 100000, 1),
+       ("Unit Manager- Underwriting", 120000, 5),
+       ("General Manager- Finance", 120000, 2),
+       ("Operations Manager- Marketing", 100000, 4);
 
-INSERT INTO employee
-    (first_name, last_name, role_id, manager_id)
-VALUES
-    ('John', 'Doe', 1, NULL),
-    ('Mike', 'Chan', 2, 1),
-    ('Ashley', 'Rodriguez', 3, NULL),
-    ('Kevin', 'Tupik', 4, 3),
-    ('Kunal', 'Singh', 5, NULL),
-    ('Malia', 'Brown', 6, 5),
-    ('Sarah', 'Lourd', 7, NULL),
-    ('Tom', 'Allen', 8, 7);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Kiran", "Wise", 1, 8),
+       ("Enzo", "Wall", 2, 11),
+       ("Agnes", "Wilkins", 3, 11),
+       ("Trystan", "Young", 4, 8),
+       ("Mckenzie", "Hubbard", 5, 10),
+       ("Macy", "Jenkins", 6, 9),
+       ("Denise", "O'Gallagher", 7, null),
+       ("Abdul", "Villa", 8, null),
+       ("Raja", "Reese", 9, null),
+       ("Lola", "McGrath", 10, null),
+       ("Todd", "Wade", 11, null),
+       ("Sebastian", "Reilly", 6, 9);

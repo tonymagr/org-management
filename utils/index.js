@@ -1,4 +1,4 @@
-//This file has the db class model
+//DB class model
 const connection = require("./connection");
 
 class DB {
