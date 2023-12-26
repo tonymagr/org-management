@@ -1,157 +1,101 @@
-//This is the driver code with the inquirer and the init function
+//INDEX.JS - Driver code with the inquirer and the init function
+
 const inquirer = require("inquirer");
-//const connection = reqire("./db/connection.js");
-// const db = require("./utils");
-const db = require("./utils/index");
-
 require("console.table");
+const db = require("./utils/db-class");
 
-function init(){
-    inquirer.prompt([
-        {
-            type: "list",
-            name: "choice",
-            message: "What would you like to do?",
-            choices: [
-                {
-                    name: "View all departments",
-                    value:"viewDepartments"
-                },
-                {
-                    name: "View all roles",
-                    value:"viewRoles"
-                },
-                {
-                    name: "View all employees",
-                    value:"viewEmployees"
-                },
-                {
-                    name: "Add a department",
-                    value:"addDepartments"
-                },
-                {
-                    name: "Add a role",
-                    value:"addRole"
-                },
-                {
-                    name: "Add employee",
-                    value:"addEmployee"
-                },
-                {
-                    name: "Update employee role",
-                    value:"updateRole"
-                },
-                // Bonus selections
-                {
-                    name: "View employees by department",
-                    value:"viewEmployeesDept"
-                },
-                {
-                    name: "View combined employee salaries of a department",
-                    value:"viewBudget"
-                },
-                {
-                    name: "Quit",
-                    value:"quit"
-                }   
-                // {
-                //     name: "View employees by manager",
-                //     value:"viewEmployeesMngr"
-                // },
-                // {
-                //     name: "Remove Employee",
-                //     value:"rmvEmployee"
-                // },
-                // {
-                //     name: "Update employee manager",
-                //     value:"updateMngr"
-                // },
-                // {
-                //     name: "Remove Role",
-                //     value:"rmvRole"
-                // },
-                // {
-                //     name: "Remove a department",
-                //     value:"rmvDepartments"
-                // }
-            ]
-        }
-    ])
+const intro =
+'--------------------------------------------------------------------------------\n\
+--------------------------------------------------------------------------------\n\
+---                                                                          ---\n\
+---               O  R  G                               O  R  G              ---\n\
+---    M  A  N  A  G  E  M  E  N  T          M  A  N  A  G  E  M  E  N  T    ---\n\
+---                                                                          ---\n\
+---                                                                          ---\n\
+---                                                                          ---\n\
+---               O  R  G                               O  R  G              ---\n\
+---    M  A  N  A  G  E  M  E  N  T          M  A  N  A  G  E  M  E  N  T    ---\n\
+---                                                                          ---\n\
+--------------------------------------------------------------------------------\n\
+--------------------------------------------------------------------------------\n';
 
-    // ------------------------------------------
-    // ------------------------------------------
-    // ------------------------------------------
-    // ------------------------------------------
-    // ------------------------------------------
-    // Remove some of these cases................
-    // ------------------------------------------
-    // ------------------------------------------
-    // ------------------------------------------
-    // ------------------------------------------
-    // ------------------------------------------
-
-    .then(res => {
-        let choice = res.choice;
-        console.log(choice);
-        switch (choice) {
-            case "viewEmployees":
-                viewEmp();
-                break;
-            case "viewEmployeesDept":
-                viewEmpDept();
-                break;
-            case "viewEmployeesMngr":
-                viewEmpMngr();
-                break;
-            case "addEmployee":
-                addEmp();
-                break;
-            case "rmvEmployee":
-                rmvEmp();
-                break;
-            case "updateRole":
-                updateRole();
-                break;
-            case "updateMngr":
-                updateMngr();
-                break;
-            case "viewRoles":
-                viewRoles();
-                break;
-            case "addRole":
-                addRole();
-                break;
-            case "rmvRole":
-                rmvRole();
-                break;
-            case "viewDepartments":
-                viewDept();
-                break;
-            case "addDepartments":
-                addDept();
-                break;
-            case "rmvDepartments":
-                rmvDept();
-                break;
-            case "viewBudget":
-                viewBudget();
-                break;
-            case "quit":
-                quit();
-                break;
-        }
-    })
-}
+// Functions - Logic for user selection
 
 // Function to view employee
 function viewEmp(){
     db.findAllEmp() // calls find all employee function from db code
-        .then(([rows]) =>{ // returns the rows from the tables and uses it for the next function
-            let emp = rows;// set emp variable to equal rows
+        .then(([rows]) => { 
+            let emp = rows;
             console.log("\n");
             console.table(emp);// print out table
         })
         .then(() => init()); // call init function
+}
+
+// Function to view employees in a department
+function viewEmpDept () {
+    db.findAllDept()                // Use the find all dept function to run SQL
+        .then(([rows]) => {
+            const deptList = rows.map(({id, name}) => ( 
+                {
+                    name: name,
+                    value: id       // Sets up values for list
+                } 
+            ));
+            inquirer.prompt([       // inquire to select department
+                {
+                    type: "list",
+                    name: "deptId",
+                    message: "For which department do you want to see the employees?",
+                    choices: deptList 
+                }   
+            ])
+            .then(res => db.findEmpDept(res.deptId)
+                    .then(([rows]) => { 
+                        if (rows.length > 0) {
+                            console.log("\n");
+                            console.table(rows);    // display results
+                        } else {
+                            console.log("No employees in this department.\n")
+                        }
+                    })
+                )
+            .then(() => init())
+        })
+}
+
+// Function to view budget of a department
+function viewDeptBudget () {
+    db.findAllDept()                // Use the find all dept function to run SQL
+        .then(([rows]) => {
+            const deptList = rows.map(({id, name}) => ( 
+                {
+                    name: name,
+                    value: id       // Sets up values for list
+                } 
+            ));
+            inquirer.prompt([       // inquire to select department
+                {
+                    type: "list",
+                    name: "deptId",
+                    message: "For which department do you want to see the budget?",
+                    choices: deptList 
+                }   
+            ])
+            .then(res => db.findDeptBudget(res.deptId)
+                    .then(([rows]) => {
+                        console.log("\n");
+                        if (rows[0].department) {       // Department found and has employees
+                            console.table(rows);        // Display result
+                        } else {
+                            rows[0].department = "Chosen Department";
+                            rows[0].budget = "$0.00";
+                            console.table(rows);        // Display zero result
+                        }
+                    })
+                )
+            .then(() => init())
+        })
 }
 
 function addEmp(){ // adds employee
@@ -224,6 +168,7 @@ function addEmp(){ // adds employee
             })
     })
 }
+
 function updateRole(){ // updateRole is used to update the role of a select user
     db.findAllEmp() // use the find all emp function from db
         .then(([rows]) => {
@@ -267,6 +212,51 @@ function updateRole(){ // updateRole is used to update the role of a select user
             })
         })
 }
+
+function rmvEmp () { // updateRole is used to update the role of a select user
+    db.findAllEmp() // use the find all emp function from db
+        .then(([rows]) => {
+            let emp = rows;
+            const empMenu = emp.map(({id, first_name, last_name}) =>( 
+                {
+                    name: `${first_name} ${last_name}`,
+                    value: id
+                } // sets up values for menu
+            ));
+            inquirer.prompt([ // inquirer asks for a list of employees you want to update
+                {
+                    type: "list",
+                    name: "empId",
+                    message: "Which employee do you want to select to update their roles.",
+                    choices: empMenu // use empMenu to generate list made in earlier code
+                }   
+            ])
+            .then(res => {
+                let empId = res.empId; // set employee id to empId response
+                db.findAllRoles() // use find all roles to get a list of roles avaliable
+                    .then(([rows]) => {
+                        let roles = rows;
+                        const roleMenu = roles.map(({title, id}) => ({ // create menu to use for inquirer
+                            name: title,
+                            value: id
+                        }));
+
+                        inquirer.prompt([ // inquirer for a choice from generated list of roles
+                            {
+                                type: "list",
+                                name: "roleId",
+                                message: "Which role do you want to assign?",
+                                choices: roleMenu
+                            }
+                        ])
+                        .then(res => db.deleteEmployee(empId, res.roleId)) // call the update employee role function from db and change it to the role selected from the response
+                        .then(() => console.log("Updated employee's role"))
+                        .then(() => init())
+                    })
+            })
+        })
+}
+
 function viewRoles(){ // View roles works the same as view employees
     db.findAllRoles()// calls findAllRoles function from db
     .then(([rows]) => {
@@ -276,6 +266,7 @@ function viewRoles(){ // View roles works the same as view employees
     })
     .then(() => init());
 }
+
 function addRole(){
     db.findAllDept()
     .then(([rows]) =>{
@@ -319,6 +310,7 @@ function viewDept(){// viewDept works the same as the other view functions
         })
         .then(() => init());
 }
+
 function addDept(){ // function used to add departments to the table
     inquirer.prompt([ // uses inquirer to get a response for adding dept
         {
@@ -335,9 +327,119 @@ function addDept(){ // function used to add departments to the table
 
     })
 }
+
 function quit(){ // Quits program
     console.log("Thank you, Goodbye")
     process.exit();
 }
+
+
+// init() function - Main inquirer loop
+
+function init(){
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "choice",
+            message: "What would you like to do?",
+            choices: [
+                {
+                    name: "View all departments",
+                    value:"viewDepartments"
+                },
+                {
+                    name: "View all roles",
+                    value:"viewRoles"
+                },
+                {
+                    name: "View all employees",
+                    value:"viewEmployees"
+                },
+                {
+                    name: "Add a department",
+                    value:"addDepartments"
+                },
+                {
+                    name: "Add a role",
+                    value:"addRole"
+                },
+                {
+                    name: "Add employee",
+                    value:"addEmployee"
+                },
+                {
+                    name: "Update employee role",
+                    value:"updateRole"
+                },
+                // Bonus selections
+                {
+                    name: "View employees by department",
+                    value:"viewEmployeesDept"
+                },
+                {
+                    name: "View combined employee salaries of a department",
+                    value:"viewBudget"
+                },
+                {
+                    name: "Remove Employee",
+                    value:"rmvEmployee"
+                },
+                {
+                    name: "Remove a department",
+                    value:"rmvDepartments"
+                },
+                // Quit program
+                {
+                    name: "Quit",
+                    value:"quit"
+                }
+            ]
+        }
+    ])
+    .then(res => {
+        let choice = res.choice;
+        console.log(choice);
+        switch (choice) {
+            case "viewDepartments":
+                viewDept();
+                break;
+            case "viewRoles":
+                viewRoles();
+                break;
+            case "viewEmployees":
+                viewEmp();
+                break;
+            case "addDepartments":
+                addDept();
+                break;
+            case "addRole":
+                addRole();
+                break;
+            case "addEmployee":
+                addEmp();
+                break;
+            case "updateRole":
+                updateRole();
+                break;
+            case "viewEmployeesDept":
+                viewEmpDept();
+                break;
+            case "viewBudget":
+                viewDeptBudget();
+                break;
+            case "rmvEmployee":
+                rmvEmp();
+                break;
+            case "rmvDepartments":
+                rmvDept();
+                break;
+            case "quit":
+                quit();
+                break;
+        }
+    })
+}
+
+console.log(intro);
 
 init();
