@@ -1,5 +1,5 @@
 //DB class model
-const connection = require("./connection");
+const connection = require('./connection');
 
 class DB {
     constructor(connection){
@@ -12,21 +12,21 @@ class DB {
         return this.connection
         .promise()
         .query(
-            "INSERT INTO employee SET ?", employee
+            `INSERT INTO employee SET ?`, employee
         );
     }
     createRole(role){
         return this.connection
         .promise()
         .query(
-            "INSERT INTO role SET ?", role
+            `INSERT INTO role SET ?`, role
         );
     }
     createDept(department){
         return this.connection
         .promise()
         .query(
-            "INSERT INTO department SET ?", department
+            `INSERT INTO department SET ?`, department
         );
     }
     //READ
@@ -55,7 +55,7 @@ class DB {
             LEFT JOIN department on role.department_id = department.id 
             LEFT JOIN employee manager on manager.id = employee.manager_id
             WHERE role.department_id = ?;`,
-            [deptId]
+            deptId
         );
     }
     findDeptBudget (deptId) {
@@ -68,7 +68,7 @@ class DB {
             LEFT JOIN department on role.department_id = department.id 
             LEFT JOIN employee manager on manager.id = employee.manager_id
             WHERE role.department_id = ?;`,
-            [deptId]
+            deptId
         );
     }
     findAllRoles(){
@@ -108,14 +108,32 @@ class DB {
             [roleId, employeeId]
         );
     }
-    //DELETE
-    deleteEmployee (employeeId, roleId) {
+    updateRoleDept (deptId, roleId) {
         return this.connection
         .promise()
         .query(
-            `UPDATE employee 
-            SET role_id = ? WHERE id = ?`,
-            [roleId, employeeId]
+            `UPDATE role 
+            SET department_id = ? WHERE id = ?`,
+            [deptId, roleId]
+        );
+    }
+    //DELETE
+    deleteEmployee (employeeId) {
+        return this.connection
+        .promise()
+        .query(
+            `DELETE FROM employee
+            WHERE id = ?;`,
+            employeeId
+        );
+    }
+    deleteDept (deptId) {
+        return this.connection
+        .promise()
+        .query(
+            `DELETE FROM department
+            WHERE id = ?;`,
+            deptId
         );
     }
 }
