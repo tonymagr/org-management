@@ -36,7 +36,8 @@ Opted for FOREIGN KEY (x) ... ON DELETE SET NULL in order to allow child rows in
 Added several bonus features to view employees by department, view total departmental salary budget, delete an employee, delete a department, and update the department of a role. <br>
 "Update the department of a role" feature may be useful after deletion of a department - easier than deleting and recreating a role to associate with a new department.
 
-[Demo Link](https://watch.screencastify.com/v/MCDDVp7sCJT7eALmaN1n){:target="_blank"} <br>
+[Demo Link](https://watch.screencastify.com/v/MCDDVp7sCJT7eALmaN1n) <br>
+
 ![Resulting table values after demo](./img/resulting%20table%20values%20after%20demo.jpg)
 
 ## Credits
@@ -45,7 +46,8 @@ I had difficulty getting the program to stop unwanted behavior, including exitin
 "You might also want to make your queries asynchronous. MySQL2 exposes a .promise() function on Connections to upgrade an existing non-Promise connection to use Promises. To learn more and make your queries asynchronous, refer to the npm documentation on MySQL2."
 
 Instead I looked for ideas for previous successful implementations of Challenge 12 and found: <br>
-[Previous implementation](https://github.com/anirud314/employeeTable/tree/main){:target="_blank"} <br>
+[Previous implementation](https://github.com/anirud314/employeeTable/tree/main) <br>
+
 I used this as my baseline code just to get a functioning combination of inquirer and mysql2.
 I have added to this baseline code extensively, including several bonus features and generation of my own schema and seeds file (and many other improvements).
 
